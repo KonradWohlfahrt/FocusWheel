@@ -6,8 +6,10 @@ This project combines hardware and software to provide:
 - Multiple focus and break timers
 - Visual and audible notifications
 - Customizable controls via knob, button, and slider
-- Expandability for future features (e.g., media control or BLE functionality)
-Whether you're a student, maker, or just looking to build a functional productivity gadget, the Focus Wheel is a great weekend project — with lots of room for upgrades! Check out the in-depth [guide]() at instructables!
+- Expandability for future features (e.g., media control or BLE functionality) \
+
+Whether you're a student, maker, or just looking to build a functional productivity gadget, the Focus Wheel is a great weekend project — with lots of room for upgrades! Check out the in-depth [guide]() at instructables! \
+
 **Sponsored by PCBWay!**
 This project was made possible with the help of [PCBWay](https://www.pcbway.com/) — a reliable PCB manufacturing service offering high-quality boards at great prices. If you’re looking to bring your electronics project to life with professionally fabricated PCBs, check them out!
 ![Focus Wheel](https://github.com/KonradWohlfahrt/FocusWheel/blob/main/images/FocusWheel_3.jpg)
@@ -48,7 +50,7 @@ This project was made possible with the help of [PCBWay](https://www.pcbway.com/
 # Schematic:
 ![Schematic](https://github.com/KonradWohlfahrt/FocusWheel/blob/main/images/Schematic_FocusWheel_V1.png)
 _Schematic of the Focus Wheel_
-![Soldering Lables](https://github.com/KonradWohlfahrt/FocusWheel/blob/main/images/SMD_Soldering.jpg)
+![Soldering Lables](https://github.com/KonradWohlfahrt/FocusWheel/blob/main/images/SMD_Soldering.png)
 _Lables for soldering components_
 
 ***
@@ -65,7 +67,6 @@ Board: `ESP32C3 Dev Module`
 Settings: default
 Connection via USB cable.
 Press the knob button (Flash) when powering up the device, it also seems uploading works without doing so.
-
 
 ***
 # 3D Printing
