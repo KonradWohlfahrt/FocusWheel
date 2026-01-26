@@ -369,7 +369,7 @@ void showTimerEnd(CRGB color)
   unsigned long t = millis();
   uint8_t i = 0;
   uint8_t half = (LED_COUNT / 2);
-  while (millis() - t < 1250)
+  while (millis() - t < 1000)
   {
     EVERY_N_MILLISECONDS(250) { playSound(); }
     EVERY_N_MILLISECONDS(25)
