@@ -4,7 +4,7 @@
 **Overview**  
 Focus Wheel 2.0 is a compact, standalone focus and time-management device designed to help you stay productive during study sessions or focused work. It combines a clean, minimal design with touch controls, visual feedback, and flexible timer logic, all powered by a rechargeable battery. This second iteration is a major step up from the original Focus Wheel. It introduces battery operation with power-path management, touch-based controls, an integrated LED ring, and a more refined enclosure. The result is a polished desk companion that’s easy to use, highly customizable, and fun to build:  
 
-[Instructables Guide](https://www.instructables.com/)  
+[Instructables Guide](https://www.instructables.com/Focus-Wheel-20-Your-Next-Gen-Study-Assistant/)  
 
 **Key Features**  
 - *Four independent timers*  
@@ -101,7 +101,7 @@ Programmed with the Arduino IDE and ESP32 board manager. Install the following l
 
 **Uploading:**  
 Board: `ESP32C3 Dev Module`\
-Settings:\
+Settings:
 ```cpp
 USB CDC On Boot: "Enabled" <- to make USB Serial work  
 CPU Frequency: "160MHz (WiFi)"  
@@ -116,7 +116,7 @@ Upload Speed: "921600"
 Zigbee Mode: "Disabled"  
 Programmer: "Esptool"  
 ```
-Connection via USB cable.\
+Connection via USB-C.\
 Press the knob button (Flash) when powering up the device for the first time.
 
 
@@ -128,7 +128,7 @@ Print `FocusWheel_Bottom` and `FocusWheel_Top` - depending on what components yo
 
 ***
 # Functions
-The following button functions are used:#
+The following button functions are used:
 - bottom button: enable/disable sound
 - middle button: start timer, pause timer, change selection (rotation)
 - top button: skip timers, enter/exit settings
