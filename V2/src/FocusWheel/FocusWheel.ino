@@ -107,7 +107,7 @@ void setup()
 
   // --- INITIALIZE LED RING ---
   FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, LED_COUNT).setCorrection(TypicalLEDStrip);
-  FastLED.setMaxPowerInVoltsAndMilliamps(5, 350);
+  FastLED.setMaxPowerInVoltsAndMilliamps(5, 250);
   FastLED.setBrightness(_brightnessOptions[currentSettings.ledBrightnessIndex]);
 
 
@@ -122,18 +122,18 @@ void setup()
 }
 void loop()
 {
-  checkButtons();
-
-  refreshTimers();
   updateLEDRing();
-  checkBattery(false);
 
+  checkButtons();
+  checkBattery(false);
+  refreshTimers();
+  
   if (currentMode == WorkPhaseMode)
   {
     if (currentTimers[currentModeIndex].activateEyeTimer && twentyMinutes.isOver())
     {
-      // only start eye timer if ~10 minutes of the work timer remain
-      if ((workTimer.getTotalRemainingMilliseconds() / 1000) >= 595)
+      // only start eye timer if ~5 minutes of the work timer remain
+      if ((workTimer.getTotalRemainingMilliseconds() / 1000) >= 300)
         awaitEyeTimer();
     }
     if (workTimer.isOver())
@@ -336,8 +336,10 @@ void checkButtons()
         encoder.setPosition(7);
     }
 
-    if (currentMode == SelectTimerMode)
+    if (currentMode == SelectTimerMode) {
+      updateLEDRing();
       drawTimerMenu(false);
+    }
     else if (currentMode == SettingsMode) 
     {
       if (isSelected)
@@ -391,6 +393,7 @@ void checkButtons()
           }
         }
       }
+      updateLEDRing();
       drawSettingsMenu(false);
     }
   }
@@ -430,7 +433,7 @@ void updateLEDRing()
 {
   if (currentMode == SelectTimerMode)
   {
-    EVERY_N_MILLISECONDS(20)
+    EVERY_N_MILLISECONDS(15)
     { 
       hue++;
       fill_rainbow(leds, LED_COUNT, hue, 255 / LED_COUNT);
@@ -446,11 +449,11 @@ void updateLEDRing()
   }
   else if (currentMode == WorkPhaseMode)
   {
-    drawCountdownRing(workTimer, CRGB::Red, CRGB::Yellow);
+    EVERY_N_MILLISECONDS(20) { drawCountdownRing(workTimer, CRGB::Red, CRGB::Yellow); }
   }
   else if (currentMode == AwaitInputMode || currentMode == AwaitEyeTimerMode)
   {
-    EVERY_N_MILLISECONDS(25) 
+    EVERY_N_MILLISECONDS(20) 
     {
       ledIndex = (ledIndex + 1) % LED_COUNT;
       leds[ledIndex] = CRGB::GhostWhite;
@@ -460,15 +463,15 @@ void updateLEDRing()
   }
   else if (currentMode == EyeTimerMode)
   {
-    drawCountdownRing(eyeTimer, CRGB::Blue, CRGB::Yellow);
+    EVERY_N_MILLISECONDS(20)  { drawCountdownRing(eyeTimer, CRGB::Blue, CRGB::Yellow); }
   }
   else if (currentMode == BreakPhaseMode)
   {
-    drawCountdownRing(breakTimer, CRGB::Green, CRGB::Yellow);
+    EVERY_N_MILLISECONDS(20) { drawCountdownRing(breakTimer, CRGB::Green, CRGB::Yellow); }
   }
   else if (currentMode == SettingsMode)
   {
-    EVERY_N_MILLISECONDS(20)
+    EVERY_N_MILLISECONDS(15)
     { 
       hue++;
       fill_solid(leds, LED_COUNT, isSelected ? CRGB::Gold : CRGB::Orange);
@@ -523,7 +526,6 @@ void drawTimerMenu(bool fullReset)
     u8x8.drawString(0, 1, "Work:");
     u8x8.drawString(0, 2, "Break:");
   }
-  
   drawCountdown(currentTimers[index].focusHours, currentTimers[index].focusMinutes, currentTimers[index].focusSeconds, 7, 1);
   drawCountdown(currentTimers[index].breakHours, currentTimers[index].breakMinutes, currentTimers[index].breakSeconds, 7, 2);
   drawSlider(3, 4, index);
@@ -606,38 +608,28 @@ void drawCountdownRing(Timer &t, CRGB color, CRGB pauseColor)
 {
   if (!t.isPaused()) 
   {
-    EVERY_N_MILLISECONDS(25) 
+    float p = constrain((float)t.getTotalRemainingMilliseconds() / (float)t.getTotalMilliseconds(), 0.0f, 100.0f);
+    uint8_t count = (uint8_t)(p * LED_COUNT);
+    for (uint8_t i = 0; i < LED_COUNT; i++)
     {
-      double percent = (double)t.getTotalRemainingMilliseconds() / t.getTotalMilliseconds();
-      int count = percent * LED_COUNT;
-      for (int i = 0; i < LED_COUNT; i++)
+      if (i < count)
+        leds[i] = color;
+      else if (i == count) 
       {
-        if (i < count)
-          leds[i] = color;
-        else if (i == count) 
-        {
-          float n = percent * LED_COUNT - count;
-          leds[i] = color;
-          leds[i].fadeToBlackBy(255 - (uint8_t)(n * 255));
-        }
-        else
-          leds[i] = CRGB::Black;
+        leds[i] = color;
+        float n = p * LED_COUNT - count;
+        leds[i].fadeToBlackBy(255 - (uint8_t)(n * 255));
       }
-      FastLED.show();
+      else
+        leds[i] = CRGB::Black;
     }
+    FastLED.show();
   }
   else 
   {
-    EVERY_N_MILLISECONDS(25) 
-    {
-      fadeToBlackBy(leds, LED_COUNT, 16); // 16/255 ~ 6%
-      FastLED.show();
-    }
-    EVERY_N_MILLISECONDS(250) 
-    {
-      leds[random8(LED_COUNT)] = pauseColor;
-      FastLED.show();
-    }
+    fadeToBlackBy(leds, LED_COUNT, 16); // 16/255 ~ 6%
+    EVERY_N_MILLISECONDS(500) { leds[random8(LED_COUNT)] = pauseColor; }
+    FastLED.show();
   }
 }
 

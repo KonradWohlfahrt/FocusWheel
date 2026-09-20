@@ -74,7 +74,7 @@ Battery voltage, charge state, and power source (USB or battery) are monitored i
 | TTP223 Touch Module | 3 | U4,U8,U9 |
 | USB-C 16P | 1 | J1 |
 | USBLC6-2SC6 SOT-23-6 | 1 | U1 |
-| WS2812B 5050 | 1 | D4-D19 |
+| WS2812B 5050 | 16 | D4-D19 |
 | Custom PCB | 1 | - |
 | 3D printed housing | 1 | - |
 | 303450 500mAh LiPo battery | 1 | - |

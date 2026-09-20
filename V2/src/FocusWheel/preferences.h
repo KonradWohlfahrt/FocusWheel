@@ -70,17 +70,17 @@ U8X8_SSD1306_128X32_UNIVISION_SW_I2C u8x8(SCL_PIN, SDA_PIN, U8X8_PIN_NONE);
 // NOTE: resistor in kOhm
 #define ADC_R1 33.0
 #define ADC_R2 47.0
-#define FULL_VOLTAGE 4.2
-#define EMPTY_VOLTAGE 3.3
+#define FULL_VOLTAGE 4200
+#define EMPTY_VOLTAGE 3300
 #define BATTERY_READ_PIN 1
 double readBatteryVoltage() 
 {
-  double Vbat = (analogReadMilliVolts(BATTERY_READ_PIN) / 1000.0) * ((ADC_R1 + ADC_R2) / ADC_R2);
-  return Vbat;
+  double Vbat = ((ADC_R1 + ADC_R2) / ADC_R2) * analogReadMilliVolts(BATTERY_READ_PIN);
+  return Vbat; // in millivolts
 }
 bool isBatteryPowered() 
 {
-  return readBatteryVoltage() <= 4.3;
+  return readBatteryVoltage() <= 4200;
 }
 uint8_t getBatteryLevel()
 {
@@ -89,7 +89,8 @@ uint8_t getBatteryLevel()
 }
 
 #define CHARGE_PIN 0
-bool isCharging() { return readBatteryVoltage() > 4.3; /*return digitalRead(CHARGE_PIN) == 0;*/ }
+//bool isCharging() { return readBatteryVoltage() > 4300; } // only use for V2.0
+bool isCharging() { return digitalRead(CHARGE_PIN) == 0; } // use for V2.1
 
 
 /*
